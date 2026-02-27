@@ -82,7 +82,7 @@ jobs:
       - name: Test action (Setup PellesC with pre-installed MSYS2 for CMake)
         uses: ./
         with:
-          version: 12.0.2
+          # version: 12.0.2
           verbose: true
 
       - name: Configure CMake

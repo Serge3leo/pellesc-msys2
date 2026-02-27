@@ -94,7 +94,7 @@ runs:
         "LIB=$env:LIB"
         get-command pocc
         pocc | Select-Object -First 1
-        if ("skip" -ne "${{ inputs.msystem }}) {
+        if ("skip" -ne "${{ inputs.msystem }}") {
           "MSYSTEM=$env:MSYSTEM"
           get-command pacman
           pacman -V  | Select-Object -First 2
