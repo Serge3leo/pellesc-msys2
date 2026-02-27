@@ -40,7 +40,7 @@ runs:
       if: ${{ 'skip' != inputs.msystem }}
       shell: pwsh
       run: |
-        $base = "C:\msys64\"
+        $base = "C:\msys64"
         $msys = "${{ inputs.msystem }}".ToLower()
         "MSYSTEM=" + $msys.ToUpper() `
           | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
@@ -72,7 +72,7 @@ runs:
 
     - name: Check CMAKE_C_COMPILER_LIST
       if: ${{ 'check' == inputs.cmake-module }}
-      shell: powershell -Command "& '{0}'"
+      shell: pwsh -File {0}
       run: |
         cmake -P detectPellesC.cmake
         "dont-pellesc=$LASTEXITCODE" `
@@ -90,6 +90,7 @@ runs:
       if: ${{ fromJSON(inputs.verbose) }}
       shell: pwsh
       run: |
+        "PATH=$env:PATH"
         "PellesCDir=$env:PellesCDir"
         "INCLUDE=$env:INCLUDE"
         "LIB=$env:LIB"
