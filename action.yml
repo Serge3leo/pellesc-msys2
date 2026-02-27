@@ -74,7 +74,7 @@ runs:
       if: ${{ 'check' == inputs.cmake-module }}
       shell: pwsh
       run: |
-        cmake -P detectPellesC.cmake
+        & cmake -P detectPellesC.cmake
         "dont-pellesc=$LASTEXITCODE" `
           | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
 
