@@ -72,7 +72,7 @@ runs:
 
     - name: Check CMAKE_C_COMPILER_LIST
       if: ${{ 'check' == inputs.cmake-module }}
-      shell: pwsh -File {0}
+      shell: powershell -Command "& '{0}'"
       run: |
         cmake -P detectPellesC.cmake
         "dont-pellesc=$LASTEXITCODE" `
