@@ -33,7 +33,8 @@ runs:
         pacman -S --noconfirm binutils make
         # choco install --yes --no-progress `
         #         pelles-c --version=${{ inputs.version }}
-        dist\13.01-git\setup.exe -S
+        cmake -E md5sum dist\13.01-git\setup.exe
+        dist\13.01-git\setup.exe
           # Hardcoded "%PellesCDir%\povars64.bat"
         $PellesCDir = "C:\Program Files\PellesC"
         "PellesCDir=$PellesCDir`n" + `
