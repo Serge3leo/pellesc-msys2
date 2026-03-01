@@ -117,10 +117,10 @@ jobs:
         # shell: pwsh  # Required $env:PellesCDir\Bin\cc.exe
         # shell: bash  # Required $PellesCDir\Bin\cc.exe
         # "-DCMAKE_C_COMPILER=${{ matrix.c_compiler }}"
-        shell: bash
+        shell: msys2bash.cmd
         run: >
           cmake -B ${{ steps.strings.outputs.build-output-dir }}
-          "-DCMAKE_C_COMPILER=$PellesCDir\Bin\cc.exe"
+          "-DCMAKE_C_COMPILER=${{ matrix.c_compiler }}"
           "-DCMAKE_BUILD_TYPE=${{ matrix.build_type }}"
           -G "${{ matrix.generator }}"
           -S "${{ github.workspace }}"
