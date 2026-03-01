@@ -86,7 +86,7 @@ jobs:
           # version: 12.0.2
           verbose: true
 
-      - name: Check Pelles C long name bug in `cc`
+      - name: Check workaround Pelles C long name bug in `cc`
         shell: pwsh -File {0}
         run: |
           $exitcode = 0
@@ -95,13 +95,13 @@ jobs:
             $exitcode = $LASTEXITCODE
             "`"cc hello.c`": FAIL $LASTEXITCODE"
           }
-          "$PellesCDirLong\Bin\cc.exe" hello.c
+          &"$PellesCDirLong\Bin\cc.exe" hello.c
           if ($LASTEXITCODE) {
             "`"$PellesCDirLong\Bin\cc.exe hello.c`": Expected $LASTEXITCODE"
           } else {
             $exitcode = 1
           }
-          "$PellesCDir\Bin\cc.exe" hello.c
+          &"$PellesCDir\Bin\cc.exe" hello.c
           if ($LASTEXITCODE) {
             $exitcode = $LASTEXITCODE
             "`"$PellesCDir\Bin\cc.exe hello.c`": FAIL $LASTEXITCODE"
