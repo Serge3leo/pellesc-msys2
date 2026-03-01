@@ -31,4 +31,11 @@ int main(void) {
         printf("__LCC__.__LCC_MINOR__ %d.%d\n",
                 __LCC__, __LCC_MINOR__);
     #endif
+    #if __STDC_VERSION__
+        printf("__STDC_VERSION__ = %ldL\n", __STDC_VERSION__);
+    #elif __STDC__
+        printf("Don't defined __STDC_VERSION__, __STDC__=%d\n", __STDC__);
+    #else
+        printf("Don't defined __STDC__ and __STDC_VERSION__\n");
+    #endif
 }

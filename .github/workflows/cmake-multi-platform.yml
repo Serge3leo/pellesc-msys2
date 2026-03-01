@@ -114,11 +114,12 @@ jobs:
         # required if you are using a single-configuration generator such as
         # make.  See
         # https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
-
+        # shell: pwsh  # Required $env:PellesCDir\Bin\cc.exe
+        shell: bash
         run: >
           cmake -B ${{ steps.strings.outputs.build-output-dir }}
+          "-DCMAKE_C_COMPILER=${{ matrix.c_compiler }}"
           "-DCMAKE_BUILD_TYPE=${{ matrix.build_type }}"
-          "-DCMAKE_C_COMPILER=$env:PellesCDir\Bin\cc.exe"
           -G "${{ matrix.generator }}"
           -S "${{ github.workspace }}"
           ${{ matrix.cmake_add }}
