@@ -42,12 +42,13 @@ jobs:
       # customize the build_type list.
 
       matrix:
-        c_compiler: [pocc]
-        # os: [windows-2025-vs2026, windows-2025, windows-2022]
         os: [windows-latest]
+        c_compiler: [cc]
         build_type: [Release]
+        # TODO: c_compiler: [pocc]
+        # TODO: os: [windows-2025-vs2026, windows-2025, windows-2022]
         include:
-          - c_compiler: pocc
+          - c_compiler: cc
             generator: "MSYS Makefiles"
             platform: "win32"
 
@@ -85,6 +86,29 @@ jobs:
           # version: 12.0.2
           verbose: true
 
+      - name: Check workaround Pelles C long name bug in `cc`
+        shell: pwsh -File {0}
+        run: |
+          $exitcode = 0
+          cc hello.c
+          if ($LASTEXITCODE) {
+            $exitcode = $LASTEXITCODE
+            "`"cc hello.c`": FAIL $LASTEXITCODE"
+          }
+          &"$env:PellesCDirLong\Bin\cc.exe" hello.c
+          if ($LASTEXITCODE) {
+            "`"$env:PellesCDirLong\Bin\cc.exe hello.c`": Expected $LASTEXITCODE"
+          } else {
+            $exitcode = 1
+          }
+          &"$env:PellesCDir\Bin\cc.exe" hello.c
+          if ($LASTEXITCODE) {
+            $exitcode = $LASTEXITCODE
+            "`"$env:PellesCDir\Bin\cc.exe hello.c`": FAIL $LASTEXITCODE"
+          }
+          del hello.obj
+          $LASTEXITCODE = $exitcode
+
       - name: Configure CMake
         # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only
         # required if you are using a single-configuration generator such as
@@ -93,8 +117,8 @@ jobs:
 
         run: >
           cmake -B ${{ steps.strings.outputs.build-output-dir }}
-          -DCMAKE_C_COMPILER=${{ matrix.c_compiler }}
           -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
+          -DCMAKE_C_COMPILER="$env:PellesCDir\Bin\cc.exe"
           -G "${{ matrix.generator }}"
           -S ${{ github.workspace }}
           ${{ matrix.cmake_add }}
