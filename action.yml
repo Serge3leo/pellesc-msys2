@@ -6,6 +6,10 @@ inputs:
     required: false
     description: Check PellesC modules, install, if not
     default: 'check'
+  cmake-update:
+    required: false
+    description: Instal last CMake version from Chocolatey
+    default: false
   msystem:
     required: false
     description: >
@@ -74,7 +78,9 @@ runs:
         if ("skip" -ne "${{ inputs.msystem }}") {
           pacman -S --noconfirm binutils make
         }
-        choco install --yes --no-progress cmake
+        if ($${{ fromJSON(inputs.cmake-update) }}) {
+          choco install --yes --no-progress cmake
+        }
 
     - name: Check PellesC modules
       if: ${{ 'check' == inputs.cmake-module }}
