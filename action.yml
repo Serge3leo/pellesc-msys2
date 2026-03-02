@@ -85,9 +85,8 @@ runs:
         "$PellesCDir\Bin" `
           | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
         if ("skip" -ne "${{ inputs.msystem }}") {
-          pacman -S --noconfirm `
-            $env:MINGW_PACKAGE_PREFIX + "binutils" `
-            $env:MINGW_PACKAGE_PREFIX + "make"
+          pacman -S --noconfirm "$env:MINGW_PACKAGE_PREFIX-binutils" `
+                                "$env:MINGW_PACKAGE_PREFIX-make"
         }
         if ($${{ fromJSON(inputs.cmake-update) }}) {
           choco install --yes --no-progress cmake
