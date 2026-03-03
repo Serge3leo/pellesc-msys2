@@ -8,6 +8,9 @@ conjunction with [MSYS2](https://github.com/marketplace/actions/setup-msys2).
 Explicit indication of `-DCMAKE_C_COMPILER=pocc` is supported, preferably.  It
 is also possible to set `cc` or automatic detection, but limited, see below.
 
+See also [CMake compiler and detections modules for Pells C](
+PellesC/README.md).
+
 ## WARNING
 The `cc` command has limitations:
 - Bugs if `cc` is called on a path that has spaces;
