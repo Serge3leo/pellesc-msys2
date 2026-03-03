@@ -89,17 +89,16 @@ runs:
       run: |
         if ("always" -eq "${{ inputs.cmake-module }}") {
           cmake -P PellesC\uninstall.cmake
+          cmake -P PellesC\install.cmake
+        } else {
+          cmake -P PellesC\detect.cmake
+          if (0 -ne $LASTEXITCODE) {
+            cmake -P PellesC\install.cmake
+          }
         }
         cmake -P PellesC\detect.cmake
-        if ($LASTEXITCODE) {
-          $LASTEXITCODE = 0
-        } else {
-          cmake -P PellesC\install.cmake
-        }
         if ($${{ fromJSON(inputs.verbose) }}) {
           "inputs.cmake-module: ${{ inputs.cmake-module }}"
-          "Result:"
-          cmake -P PellesC\detect.cmake
           "---"
         }
 
