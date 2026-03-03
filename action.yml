@@ -17,7 +17,7 @@ inputs:
   location:
     required: false
     description: Where to install Pelles C
-    default: 'c:\pellec'
+    default: ~\pellec
   msystem:
     required: false
     description: >-
@@ -116,13 +116,13 @@ runs:
         $key = "PellesC_${{ inputs.version }}_"
         if ("" -eq "${{ inputs.location }}") {
           $pd = "C:\Program Files\PellesC"
-          $path = "/c/Program Files/PellesC"
+          # $path = "/c/Program Files/PellesC"
           $sa = ""
           $ia = ""
           $key += "default"
         } else {
           $pd = "${{ inputs.location }}"
-          $path = "/c/Program Files/PellesC"
+          # $path = "/c/Program Files/PellesC"
           $sa = "/D=$pd"
           $ia = "--install-arguments=$sa"
           $key += $pd -replace "[^a-z]", ""
@@ -134,7 +134,7 @@ runs:
           }
           $key += "_${{ runner.os }}"
          #>
-        "path=$(cygpath -u `"$pd`")`n" + `
+        "path=$pd`n" + `
         "pd=$pd`n" + `
         "sa=$sa`n" + `
         "ia=$ia`n" + `
@@ -146,10 +146,8 @@ runs:
       id: cache-pd
       uses: actions/cache/restore@v5
       with:
-        key: ${{ runner.os }}-build
-        path: /c/pellec
-        # key: ${{ steps.pd.outputs.key }}
-        # path: ${{ steps.pd.outputs.path }}
+        key: ${{ steps.pd.outputs.key }}
+        path: ${{ steps.pd.outputs.path }}
 
     - name: Install Pelles C
       if: ${{ !fromJSON(steps.cache-pd.outputs.cache-hit) }}
@@ -178,10 +176,8 @@ runs:
       if: ${{ !fromJSON(steps.cache-pd.outputs.cache-hit) }}
       uses: actions/cache/save@v5
       with:
-        key: ${{ runner.os }}-build
-        path: /c/pellec
-        # key: ${{ steps.pd.outputs.key }}
-        # path: ${{ steps.pd.outputs.path }}
+        key: ${{ steps.pd.outputs.key }}
+        path: ${{ steps.pd.outputs.path }}
 
     - name: Pelles C environments variables
       shell: pwsh
