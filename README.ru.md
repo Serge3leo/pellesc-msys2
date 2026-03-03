@@ -3,19 +3,28 @@
 # pellesc-msys2
 Устанавливает компилятор Pelles C и настраивает пути и переменные для
 возможности использования CMake генератора "MSYS Makefiles" совместно с
-предустановленным в образе MSYS2.
+[MSYS2](https://github.com/marketplace/actions/setup-msys2).
+
+Поддерживается явное указание `-DCMAKE_C_COMPILER=pocc`, предпочтительно.  Так
+же возможно задание `cc` или автоматическое определение, но ограничено,
+смотрите ниже.
+
+Смотрите так же [CMake модули поддержки Pells C](PellesC/README.ru.md).
 
 ## ПРЕДУПРЕЖДЕНИЕ
-Команда `cc` имеет ошибку, в случае если она вызывается с явным указанием пути,
-который имеет пробелы. Поэтому CMake не может её использовать, работает только
-явное указание `cmake ... -DCMAKE_C_COMPILER=pocc ...`. Пример возникновения
-этой ошибки смотрите шаг `Check workaround Pelles C long name bug`
-[cmake-multi-platform.yml](.github/workflows/cmake-multi-platform.yml).
+Команда `cc` имеет ограничения:
+- Ошибки, в случае если `cc` вызывается по пути, который имеет пробелы;
+- В версии `11.0.2`, не совместима с Windows 2022/2025;
 
-Для её обхода необходимо:
-1. Использовать пути без пробелов, например Short File Name (SFN,
-   `C:\PROGRA~1\PellesC\Bin`);
-2. Обновить версию CMake, параметр `cmake-update: true`, смотрите ниже.
+Подробности смотрите [Test Pelles C](
+https://github.com/Serge3leo/test-pellesc/blob/main/.github/workflows/test-pellesc.yml).
+
+Если необходимо CMake автоопределение компилятора `cc`, для её обхода можно
+использовать два варианта:
+1. Установку Pelles C в каталог без пробелов в пути (параметр
+   [location](#location)).  Используется по умолчанию;
+2. Установку переменных окружения в форме SFN (Short File Names, параметр
+   [env-workaround](#env-workaround).  Зависит от версии CMake.
 
 # Использование
 ```
@@ -37,6 +46,13 @@
     https://github.com/Serge3leo/countof_ns/blob/main/.github/workflows/cmake-multi-platform.yml).
 
 # Параметры
+## cache
+  - Тип: `boolean`
+  - Значение по умолчанию: `true`
+
+Для ускорения повторного использования, кэшировать `MSYS2` и каталог установки
+Pelles C.
+
 ## cmake-module
   - Тип: `string`
   - Допустимые значения: `check | always | not`
@@ -46,18 +62,28 @@
 Всегда устанавливать модули поддержки Pelles C.
 
 ### check
-Проверить переменную `CMAKE_C_COMPILER_LIST`.  Устанавливать модули поддержки
-Pelles C, если эта переменная не содержит `PellesC`.
+Проверить наличие.  Устанавливать модули поддержки Pelles C, если их нет.
 
 ### no
 Не устанавливать модули поддержки Pelles C.
 
-## cmake-update
+## env-workaround
   - Тип: `boolean`
   - Значение по умолчанию: `false`
 
-Обновить версию CMake из репозитория Chocolatey Software, Inc. до последней
-доступной.
+Преобразовать переменные окружения в форму SFN, т.е. при значении
+[location](#location) `c:\pellesc` они останутся неизменными, а при значении
+`location` `C:\Program Files\PellesC` все вхождения будут заменены на
+`C:\PROGRA~1\PellesC` (цифра может изменяться в зависимости от конкретной
+установки).
+
+## location
+  - Тип: string
+  - Допустимые значения: имя каталога или пустая строка
+  - Значение по умолчанию: `c:\pellesc`
+
+Если явно задано пустым, то каталог установки задаётся программой установки
+Pelles C, для существующих версий `C:\Program Files\PellesC`.
 
 ## msystem
   - Тип: string
@@ -80,7 +106,7 @@ https://www.msys2.org/docs/environments) и `PATH`.  Регистр игнори
   - Значение по умолчанию: `13.01-git-lfs`
 
 Если не задан, устанавливается версия `13.01-git-lfs` из этого репозитория
-(13.01, 23 дек 2025 [https://www.pellesc.se](https://www.pellesc.se), которой
+(13.01, 23 Дек 2025, [https://www.pellesc.se](https://www.pellesc.se)), которой
 нет у Chocolatey Community).  Иначе будет установлена указанная версия.  Список
 доступных версии приведён:
 [https://community.chocolatey.org/packages/pelles-c](https://community.chocolatey.org/packages/pelles-c).
