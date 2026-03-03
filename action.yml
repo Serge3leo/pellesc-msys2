@@ -125,9 +125,9 @@ runs:
           $key += "_${{ runner.os }}"
          #>
         "pd=$pd`n" + `
-        "sa=$san" + `
-        "ia=$ian" + `
-        "key=$keyn"
+        "sa=$sa`n" + `
+        "ia=$ia`n" + `
+        "key=$key`n"
           | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
 
     - name: Restore cached Pelles C directory
