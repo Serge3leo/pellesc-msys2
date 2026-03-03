@@ -81,6 +81,7 @@ jobs:
       - name: Test action (Setup PellesC with pre-installed MSYS2 for CMake)
         uses: ./
         with:
+          location:
           version: ${{ matrix.version }}
           verbose: true
 
