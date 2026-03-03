@@ -39,13 +39,6 @@ inputs:
 runs:
   using: composite
   steps:
-    - name: Debug
-      shell: bash
-      run: |
-        ls /c
-        ls "/c/Program Files"
-        env
-
     - name: Checkout
       if: ${{ endsWith(inputs.version, '-git-lfs') ||
               'no' != inputs.cmake-module }}
@@ -138,7 +131,6 @@ runs:
         "key=$key`n"
           | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
 
-
     - name: Restore cached Pelles C directory
       id: cache-pd
       uses: actions/cache/restore@v5
@@ -179,8 +171,8 @@ runs:
     - name: Pelles C environments variables
       shell: pwsh
       run: |
-        cmd /c "`"${{ steps.pd.outputs.pd }}\Bin\povars64.bat`" && set" | `
-          .{process{
+        $pd = "${{ steps.pd.outputs.pd }}"
+        cmd /c "`"$pd\Bin\povars64.bat`" && set" | .{process{
             if ($_ -match '^((pellescdir|include|lib|path)[^=]*)=(.*)') {
               Set-Variable ("pd_" + $matches[1]) $matches[3]
             }
