@@ -151,7 +151,7 @@ runs:
         # path: ${{ steps.pd.outputs.path }}
 
     - name: Install Pelles C
-      if: ${{ !fromJSON(steps.cache-pd.outputs.cache-hit) }}
+      if: steps.cache-pd.outputs.cache-hit != 'true'
       shell: pwsh
       run: |
         $setup = "dist\${{ inputs.version }}\setup.exe"
@@ -174,7 +174,7 @@ runs:
         }
 
     - name: Save cached Pelles C directory
-      if: ${{ !fromJSON(steps.cache-pd.outputs.cache-hit) }}
+      if: steps.cache-pd.outputs.cache-hit != 'true'
       uses: actions/cache/save@v5
       with:
         key: ${{ steps.pd.outputs.key }}
