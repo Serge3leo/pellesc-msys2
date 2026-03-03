@@ -17,7 +17,7 @@ inputs:
   location:
     required: false
     description: Where to install Pelles C
-    default: ~\pellesc
+    default: c:\pellesc
   msystem:
     required: false
     description: >-
@@ -116,13 +116,11 @@ runs:
         $key = "PellesC_${{ inputs.version }}_"
         if ("" -eq "${{ inputs.location }}") {
           $pd = "C:\Program Files\PellesC"
-          # $path = "/c/Program Files/PellesC"
           $sa = ""
           $ia = ""
           $key += "default"
         } else {
           $pd = "${{ inputs.location }}"
-          # $path = "/c/Program Files/PellesC"
           $sa = "/D=$pd"
           $ia = "--install-arguments=$sa"
           $key += $pd -replace "[^a-z]", ""
@@ -134,7 +132,6 @@ runs:
           }
           $key += "_${{ runner.os }}"
          #>
-        "path=$pd`n" + `
         "pd=$pd`n" + `
         "sa=$sa`n" + `
         "ia=$ia`n" + `
@@ -147,8 +144,7 @@ runs:
       uses: actions/cache/restore@v5
       with:
         key: ${{ steps.pd.outputs.key }}
-        path: ~/pellesc
-        # path: ${{ steps.pd.outputs.path }}
+        path: ${{ steps.pd.outputs.pd }}
 
     - name: Install Pelles C
       if: steps.cache-pd.outputs.cache-hit != 'true'
@@ -178,8 +174,7 @@ runs:
       uses: actions/cache/save@v5
       with:
         key: ${{ steps.pd.outputs.key }}
-        path: ~/pellesc
-        # path: ${{ steps.pd.outputs.path }}
+        path: ${{ steps.pd.outputs.pd }}
 
     - name: Pelles C environments variables
       shell: pwsh
