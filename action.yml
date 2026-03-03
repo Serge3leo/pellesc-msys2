@@ -118,6 +118,7 @@ runs:
           $ia = "--install-arguments=$sa"
           $key += $pd -replace "[^a-z]", ""
         }
+        mkdir "$pd"
         <# TODO: probably don't needed?
           if ($${{ fromJSON(inputs.env-workaround) }}) {
             $key += "_SFN"
