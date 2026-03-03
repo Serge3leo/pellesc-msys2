@@ -146,8 +146,10 @@ runs:
       id: cache-pd
       uses: actions/cache/restore@v5
       with:
-        key: ${{ steps.pd.outputs.key }}
-        path: ${{ steps.pd.outputs.path }}
+        key: ${{ runner.os }}-build
+        path: /c/pellec
+        # key: ${{ steps.pd.outputs.key }}
+        # path: ${{ steps.pd.outputs.path }}
 
     - name: Install Pelles C
       if: ${{ !fromJSON(steps.cache-pd.outputs.cache-hit) }}
@@ -176,8 +178,10 @@ runs:
       if: ${{ !fromJSON(steps.cache-pd.outputs.cache-hit) }}
       uses: actions/cache/save@v5
       with:
-        key: ${{ steps.pd.outputs.key }}
-        path: ${{ steps.pd.outputs.path }}
+        key: ${{ runner.os }}-build
+        path: /c/pellec
+        # key: ${{ steps.pd.outputs.key }}
+        # path: ${{ steps.pd.outputs.path }}
 
     - name: Pelles C environments variables
       shell: pwsh
