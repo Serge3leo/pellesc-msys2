@@ -17,7 +17,7 @@ inputs:
   location:
     required: false
     description: Where to install Pelles C
-    default: ~\pellec
+    default: ~\pellesc
   msystem:
     required: false
     description: >-
@@ -147,7 +147,8 @@ runs:
       uses: actions/cache/restore@v5
       with:
         key: ${{ steps.pd.outputs.key }}
-        path: ${{ steps.pd.outputs.path }}
+        path: ~/pellesc
+        # path: ${{ steps.pd.outputs.path }}
 
     - name: Install Pelles C
       if: ${{ !fromJSON(steps.cache-pd.outputs.cache-hit) }}
@@ -177,7 +178,8 @@ runs:
       uses: actions/cache/save@v5
       with:
         key: ${{ steps.pd.outputs.key }}
-        path: ${{ steps.pd.outputs.path }}
+        path: ~/pellesc
+        # path: ${{ steps.pd.outputs.path }}
 
     - name: Pelles C environments variables
       shell: pwsh
