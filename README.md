@@ -20,7 +20,7 @@ For details, see [Test Pelles C](
 https://github.com/Serge3leo/test-pellesc/blob/main/.github/workflows/test-pellesc.yml).
 
 If you need CMake to autodetect the `cc` compiler, you can use two options to
-work around it:
+workaround it:
 1. Install Pelles C in a directory without spaces in the path (parameter
    [location](#location)). This is the default option.
 2. Set environment variables in SFN (Short File Names) format (parameter
