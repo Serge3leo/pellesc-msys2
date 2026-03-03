@@ -133,7 +133,7 @@ runs:
 
     - name: Restore cached Pelles C directory
       id: cache-pd
-      uses: action/cache/restore@v5
+      uses: actions/cache/restore@v5
       with:
         key: ${{ steps.pd.outputs.key }}
         path: ${{ steps.pd.outputs.pd }}
@@ -163,7 +163,7 @@ runs:
 
     - name: Save cached Pelles C directory
       if: ${{ !fromJSON(steps.cache-pd.outputs.cache-hit) }}
-      uses: action/cache/save@v5
+      uses: actions/cache/save@v5
       with:
         key: ${{ steps.pd.outputs.key }}
         path: ${{ steps.pd.outputs.pd }}
