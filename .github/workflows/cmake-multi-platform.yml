@@ -85,7 +85,7 @@ jobs:
           verbose: true
           # location:  # Default of installer: `C:\Program Files\PellesC`
           # env-workaround: true  # Needed workaround
-          # cmake-update: true
+          cmake-update: true
           # install: patch
           # pacboy: clang:p
 

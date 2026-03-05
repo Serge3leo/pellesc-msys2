@@ -180,9 +180,11 @@ runs:
           }
           Start-Process "$setup" "/S ${{ steps.pd.outputs.sa }}" `
                         -Wait -Verb runas
+          # setup.exe /S /D=c:\pellesc
         } else {
           choco install --yes --no-progress pelles-c `
                 --version=${{ inputs.version }} ${{ steps.pd.outputs.ia }}
+          # install pelles-c --version=11.0.2 --install-arguments=/D=c:\pellesc
         }
 
     - name: Save cached Pelles C directory
