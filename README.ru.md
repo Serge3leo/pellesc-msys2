@@ -67,6 +67,12 @@ Pelles C.
 ### no
 Не устанавливать модули поддержки Pelles C.
 
+## cmake-update
+  - Тип: `boolean`
+  - Значение по умолчанию: `false`
+
+Устанавливает в MSYS2 последнюю версию CMake.
+
 ## env-workaround
   - Тип: `boolean`
   - Значение по умолчанию: `false`
@@ -76,6 +82,19 @@ Pelles C.
 `location` `C:\Program Files\PellesC` все вхождения будут заменены на
 `C:\PROGRA~1\PellesC` (цифра может изменяться в зависимости от конкретной
 установки).
+
+## install
+  - Тип: `string`
+  - Допустимые значения: список пакетов, разделенных пробелами
+
+Установка дополнительных пакетов после обновления системы поддерживается с
+помощью опции install.  См. [Setup MSYS2, install](
+https://github.com/msys2/setup-msys2?tab=readme-ov-file#install).
+
+## key-prefix
+  - Тип: `string`
+
+Добавляет префикс к ключу кэш (для обновления версии, идентификации и т.п.).
 
 ## location
   - Тип: string
@@ -94,6 +113,14 @@ Pelles C, для существующих версий `C:\Program Files\PellesC
 Задаёт значение переменной окружения [`MSYSTEM`](
 https://www.msys2.org/docs/environments) и `PATH`.  Регистр игнорируется.  Если
 равно `skip`, то настройка MSYS2 пропускается.
+
+## pacboy
+  - Тип: `string`
+  - Допустимые значения: список пакетов, разделенных пробелами
+
+Установка дополнительных пакетов после обновления системы поддерживается с
+помощью опции pacboy.  См. [Setup MSYS2, pacboy](
+https://github.com/msys2/setup-msys2?tab=readme-ov-file#pacboy).
 
 ## verbose
   - Тип: `boolean`
@@ -116,4 +143,4 @@ https://www.msys2.org/docs/environments) и `PATH`.  Регистр игнори
 приветствуются.
 
 # Лицензия
-[BSD-2-Clause © 2025 Сергей Леонтьев (leo@sai.msu.ru).](LICENSE)
+[BSD-2-Clause © 2026 Сергей Леонтьев (leo@sai.msu.ru).](LICENSE)
