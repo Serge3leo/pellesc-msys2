@@ -60,10 +60,25 @@ inputs:
 runs:
   using: composite
   steps:
-    - name: Check Windows version
+    - name: Check Windows version compatible with PellesC CMake modules
+      if: ${{ 'no' != inputs.cmake-module }}
       shell: pwsh
       run: |
-        [System.Environment]::OSVersion
+        if ($${{ fromJSON(inputs.verbose) }}) {
+          [System.Environment]::OSVersion
+        }
+        $pv = "${{ inputs.version }}" -replace -replace "[^0-9.]*$"
+        $pw11 = "13.0"
+        $w11bld = 22000
+        if ([version]$pv -lt [version]$pv11 &&
+            [System.Environment]::OSVersion.Version.Build -lt $w11bld) {
+          Write-Error ("PelleC ${{ inputs.version }} CMake modules" + `
+                       " incompatible with Windows " + `
+                       [System.Environment]::OSVersion.Version + "`n" + `
+                       "Use PelleC $pw11 or ``cmake-module: 'no'``" + `
+                       " or Windows 10/2022")
+          Exit 1
+        }
 
     - name: GitHub LFS pull
       if: ${{ endsWith(inputs.version, '-git-lfs') }}
