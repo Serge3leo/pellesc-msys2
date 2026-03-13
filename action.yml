@@ -71,8 +71,8 @@ runs:
       run: |
         pwd
         echo "GITHUB_ACTION_PATH=$GITHUB_ACTION_PATH"
-        ls -l "$GITHUB_ACTION_PATH"
-        ls -lR "$GITHUB_ACTION_PATH"/dist
+        ls -la "$GITHUB_ACTION_PATH"
+        ls -laR "$GITHUB_ACTION_PATH"/dist
         exit 0
 
     - name: Setup MSYS2
