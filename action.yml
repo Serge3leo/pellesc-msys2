@@ -181,11 +181,10 @@ runs:
         $setup = "$env:GITHUB_ACTION_PATH\$base"
         if (Test-Path -Path "$setup" -PathType Leaf) {
           $ptrn = '^.*[/\\]_actions[/\\]'
-          if ($action_path -match $ptrn) {
+          if ($env:GITHUB_ACTION_PATH -match $ptrn) {
             $restapi = 'https://media.githubusercontent.com/media/' + `
                        ($action_path -replace $ptrn) + '/' + `
                        $base
-            $setup = "c:\tmp\setup.exe"
             Invoke-WebRequest $restapi -OutFile $setup
             dir $setup
           }
