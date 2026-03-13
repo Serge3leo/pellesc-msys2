@@ -178,7 +178,7 @@ runs:
       shell: pwsh
       run: |
         $base = "dist\${{ inputs.version }}\setup.exe"
-        $setup = "$env:GITHUB_ACTION_PATH\dist\$base"
+        $setup = "$env:GITHUB_ACTION_PATH\$base"
         if (Test-Path -Path "$setup" -PathType Leaf) {
           $ptrn = '^.*[/\\]_actions[/\\]'
           if ($action_path -match $ptrn) {
