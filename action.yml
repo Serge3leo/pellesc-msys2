@@ -71,12 +71,13 @@ runs:
       run: git lfs pull
 
     - name: Debug checkout
-      shell: bash {0} || true
+      shell: bash {0}
       run: |
         pwd
         ls -l
-        ls -l PellesC
-        ls -l dist
+        echo "GITHUB_ACTION_PATH=$GITHUB_ACTION_PATH"
+        ls -l "$GITHUB_ACTION_PATH"
+        exit 0
 
     - name: Setup MSYS2
       if: ${{ 'skip' != inputs.msystem }}
