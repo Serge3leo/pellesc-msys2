@@ -60,15 +60,25 @@ inputs:
 runs:
   using: composite
   steps:
-    - name: Checkout
-      if: ${{ endsWith(inputs.version, '-git-lfs') ||
-              'no' != inputs.cmake-module }}
-      uses: actions/checkout@v6
-
-    - name: GitHub LFS pull
-      if: ${{ endsWith(inputs.version, '-git-lfs') }}
+    - name: Check Windows version compatible with PellesC CMake modules
+      if: ${{ 'no' != inputs.cmake-module }}
       shell: pwsh
-      run: git lfs pull
+      run: |
+        if ($${{ fromJSON(inputs.verbose) }}) {
+          [System.Environment]::OSVersion
+        }
+        $pv = "${{ inputs.version }}" -replace "[^0-9.]*$"
+        $pw11 = "13.0"
+        $w11bld = 22000
+        if (([version]$pv -lt [version]$pw11) -and
+            ([System.Environment]::OSVersion.Version.Build -ge $w11bld)) {
+          Write-Error ("PelleC ${{ inputs.version }} CMake modules" + `
+                       " incompatible with Windows " + `
+                       [System.Environment]::OSVersion.Version + "`n" + `
+                       "Use PelleC >= $pw11 or ``cmake-module: 'no'``" + `
+                       " or Windows 10/2022")
+          Exit 1
+        }
 
     - name: Setup MSYS2
       if: ${{ 'skip' != inputs.msystem }}
@@ -111,16 +121,17 @@ runs:
       if: ${{ 'no' != inputs.cmake-module }}
       shell: pwsh -File {0}
       run: |
+        $pm = "$env:GITHUB_ACTION_PATH\PellesC"
         if ("always" -eq "${{ inputs.cmake-module }}") {
-          cmake -P PellesC\uninstall.cmake
-          cmake -P PellesC\install.cmake
+          cmake -P "$pm\uninstall.cmake"
+          cmake -P "$pm\install.cmake"
         } else {
-          cmake -P PellesC\detect.cmake
+          cmake -P "$pm\detect.cmake"
           if (0 -ne $LASTEXITCODE) {
-            cmake -P PellesC\install.cmake
+            cmake -P "$pm\install.cmake"
           }
         }
-        cmake -P PellesC\detect.cmake
+        cmake -P "$pm\detect.cmake"
         if ($${{ fromJSON(inputs.verbose) }}) {
           "inputs.cmake-module: ${{ inputs.cmake-module }}"
           "---"
@@ -166,17 +177,32 @@ runs:
       if: steps.cache-pd.outputs.cache-hit != 'true'
       shell: pwsh
       run: |
-        $setup = "dist\${{ inputs.version }}\setup.exe"
+        $base = "dist\${{ inputs.version }}\setup.exe"
+        $setup = "$env:GITHUB_ACTION_PATH\$base"
         if (Test-Path -Path "$setup" -PathType Leaf) {
+          $ptrn = '^.*[/\\]_actions[/\\]'
+          if ($env:GITHUB_ACTION_PATH -match $ptrn) {
+            $restapi = 'https://media.githubusercontent.com/media/' + `
+                       ($env:GITHUB_ACTION_PATH -replace $ptrn) + '/' + `
+                       $base
+            if ($${{ fromJSON(inputs.verbose) }}) {
+              "Rest API URL: '$restapi'"
+            }
+            Invoke-WebRequest $restapi -OutFile $setup
+            if ($${{ fromJSON(inputs.verbose) }}) {
+              dir $setup
+            }
+          }
           $shasum = (Get-FileHash $setup)
           if ($${{ fromJSON(inputs.verbose) }}) {
             $shasum
           }
+          # TODO setup.exe.sha512, may be by next version?
           if ( `
           '84E586D1FCA7B9FEC55BD294A103AF16A045D1DF1BCB77A3F4FDF13D8F239141' `
               -ne $shasum.Hash) {
-            "`"$setup`": corrupted"
-            TODO-Fail
+            Write-Error "'$setup': misconfigured or corrupted"
+            Exit 2
           }
           Start-Process "$setup" "/S ${{ steps.pd.outputs.sa }}" `
                         -Wait -Verb runas
