@@ -80,32 +80,6 @@ runs:
           Exit 1
         }
 
-    - name: GitHub LFS pull
-      if: ${{ endsWith(inputs.version, '-git-lfs') }}
-      working-directory: ${{ github.action_path }}
-      shell: bash {0}
-      run: |
-        echo "github.action = '${{ github.action }}'"
-        echo "github.action_path = '${{ github.action_path }}'"
-        echo "github.action_ref = '${{ github.action_ref }}'"
-        echo "github.action_repository = '${{ github.action_repository }}'"
-        echo "github.action_status = '${{ github.action_status }}'"
-        set -x
-        pwd
-        ls -la
-        ls -laR dist
-        git lfs pull
-        ls -laR dist
-
-    - name: Debug checkout
-      shell: bash {0}
-      run: |
-        pwd
-        echo "GITHUB_ACTION_PATH=$GITHUB_ACTION_PATH"
-        ls -la "$GITHUB_ACTION_PATH"
-        ls -laR "$GITHUB_ACTION_PATH"/dist
-        exit 0
-
     - name: Setup MSYS2
       if: ${{ 'skip' != inputs.msystem }}
       id: msys2
@@ -203,8 +177,16 @@ runs:
       if: steps.cache-pd.outputs.cache-hit != 'true'
       shell: pwsh
       run: |
-        $setup = "$env:GITHUB_ACTION_PATH\dist\${{ inputs.version }}\setup.exe"
+        $base = "dist\${{ inputs.version }}\setup.exe"
+        $setup = "$env:GITHUB_ACTION_PATH\dist\$base"
         if (Test-Path -Path "$setup" -PathType Leaf) {
+          $ptrn = '^.*[/\\]_actions[/\\]'
+          if ($action_path -match $ptrn) {
+            $restapi = 'https://media.githubusercontent.com/media/' + `
+                       ($action_path -replace $ptrn) + '/' `
+                       $base
+            Invoke-WebRequest $restapi -OutFile $setup
+          }
           $shasum = (Get-FileHash $setup)
           if ($${{ fromJSON(inputs.verbose) }}) {
             $shasum
