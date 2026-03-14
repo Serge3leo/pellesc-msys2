@@ -192,6 +192,9 @@ runs:
             if ($${{ fromJSON(inputs.verbose) }}) {
               dir $setup
             }
+          } else {
+            # For `./` may use
+            git lfs pull
           }
           $shasum = (Get-FileHash $setup)
           if ($${{ fromJSON(inputs.verbose) }}) {
