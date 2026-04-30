@@ -30,13 +30,13 @@ https://github.com/Serge3leo/test-pellesc/blob/main/.github/workflows/test-pelle
 
 # Использование
 ```
-  - uses: Serge3leo/pellesc-setup@v0
+  - uses: Serge3leo/pellesc-setup@v1
 ```
 
 или
 
 ```
-  - uses: Serge3leo/pellesc-setup@v0
+  - uses: Serge3leo/pellesc-setup@v1
     with:
       version: 12.0.2
       verbose: true

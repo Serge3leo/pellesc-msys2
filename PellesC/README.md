@@ -29,15 +29,14 @@ cmake -P PellesC\detect.cmake
 
 Check registration Pelles C for current CMake.
 
-## Known limitations
-
-- CMP0197 policy not implemented (32-bit not verified).
-
 # Links
-- Discourse: [Contribution to the Pelles C Module](
+- Discussion: [Contribution to the Pelles C Module](
   https://discourse.cmake.org/t/contribution-to-the-pelles-c-module/2268);
 - Issue #21536: [Pelles C toolchain support](
   https://gitlab.kitware.com/cmake/cmake/-/issues/21536)
+- Original PR #11885 (current, not yet implemented part): [PellesC: Add support
+  for this compiler](
+  https://gitlab.kitware.com/cmake/cmake/-/merge_requests/11885)
 
 # Disclaimer
 Sorry for my best English.  Alas, this file is actually a yandex translation of
