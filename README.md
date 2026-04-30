@@ -31,13 +31,13 @@ workaround it:
 
 # Usage
 ```
-  - uses: Serge3leo/pellesc-setup@v0
+  - uses: Serge3leo/pellesc-setup@v1
 ```
 
 or
 
 ```
-  - uses: Serge3leo/pellesc-setup@v0
+  - uses: Serge3leo/pellesc-setup@v1
     with:
       version: 12.0.2
       verbose: true

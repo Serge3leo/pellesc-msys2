@@ -30,12 +30,11 @@ cmake -P PellesC\detect.cmake
 
 Проверяет регистрацию Pelles C для текущего CMake.
 
-## Известные особенности и ограничения
-
-- Политика CMP0197 не реализована (32-бит не проверен).
-
 #  Ссылки
-- Discourse: [Contribution to the Pelles C Module](
+- Обсуждение: [Contribution to the Pelles C Module](
   https://discourse.cmake.org/t/contribution-to-the-pelles-c-module/2268);
-- Issue #21536: [Pelles C toolchain support](
+- Замечание #21536: [Pelles C toolchain support](
   https://gitlab.kitware.com/cmake/cmake/-/issues/21536)
+- Оригинальное предложение (текущая, ещё не реализованная часть) #11885:
+  [PellesC: Add support for this compiler](
+  https://gitlab.kitware.com/cmake/cmake/-/merge_requests/11885)
